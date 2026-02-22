@@ -171,11 +171,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <i class="bx bx-log-in"></i>
                 Se connecter
             </button>
+            
         </form>
         
 
         <div class="register-link">
-            Première connexion ? <a href="register.php">Créer un compte admin</a>
+             <a href="register.php">Créer un compte admin</a>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="mot_de_passe_oublie.php" style="color: rgb(1, 62, 1); text-decoration: none;">
+                Mot de passe oublié ?
+            </a>
         </div>
     </div>
     

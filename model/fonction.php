@@ -1,7 +1,7 @@
 <?php
 include 'connexion.php';
 
-// ================= ARTICLES =================
+// ARTICLES 
 function getArticle($id = null, $inclure_archives = false)
 {
     global $connexion;
@@ -249,7 +249,7 @@ function getLastVentes($limit = 10) {
 function getTopVentes($limit = 10) {
     global $connexion;
     
-    // ✅ Forcer la limite en entier
+    // Forcer la limite en entier
     $limit = (int)$limit;
     
     $sql = "SELECT 
@@ -262,7 +262,7 @@ function getTopVentes($limit = 10) {
             WHERE v.etat = '1'
             GROUP BY a.id, a.nom_article
             ORDER BY total_ca DESC
-            LIMIT $limit"; // ✅ Plus de ? ou :limit
+            LIMIT $limit"; //  Plus de ? ou :limit
     
     $stmt = $connexion->prepare($sql);
     $stmt->execute();
@@ -356,7 +356,7 @@ function getRecuVente($id_vente) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// ================= FOURNISSEURS =================
+//  FOURNISSEURS 
 function getFournisseur($id = null)
 {
     global $connexion;
@@ -389,7 +389,7 @@ function getFournisseurArchive() {
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// ================= COMMANDES =================
+// COMMANDES 
 function getCommande($id = null)
 {
     global $connexion;
@@ -656,7 +656,7 @@ function getAllCommande()
     return $req->fetch();
 }
 
-// ================= STATISTIQUES =================
+//  STATISTIQUES 
 function getAllVente() {
     global $connexion;
     $sql = "SELECT v.*, 
@@ -673,7 +673,7 @@ function getAllVente() {
     $req->execute();
     $result = $req->fetchAll(PDO::FETCH_ASSOC);
     
-    // ✅ Si vide, retourne un tableau vide (évite les erreurs)
+    //  Si vide, retourne un tableau vide (évite les erreurs)
     return $result ?: [];
 }
 function getVentesDuJour() {
@@ -727,7 +727,7 @@ function getCA()
     return $result['prix'] ? (float) $result['prix'] : 0;
 }
 
-// ================= CATÉGORIES =================
+// CATÉGORIES 
 function getCategorie($id = null)
 {
     global $connexion;
@@ -745,7 +745,7 @@ function getCategorie($id = null)
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// ================= MODULE STOCK =================
+//  MODULE STOCK 
 function getTotalArticles() {
     $sql = "SELECT COUNT(*) AS total FROM article WHERE statut = 'actif'";
     $req = $GLOBALS['connexion']->prepare($sql);
@@ -835,7 +835,7 @@ function getAlertesStock() {
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// ================= MOUVEMENTS DE STOCK =================
+// MOUVEMENTS DE STOCK 
 function ajouterEntreeStock($id_article, $quantite, $motif = 'Entrée de stock') {
     $connexion = $GLOBALS['connexion'];
     
@@ -974,7 +974,7 @@ function getMouvementsStockFiltres($filtres = []) {
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// ================= MODULE UTILISATEURS =================
+// MODULE UTILISATEURS 
 function verifierAdminExiste() {
     $sql = "SELECT COUNT(*) as nbre FROM utilisateur WHERE role = 'admin'";
     $req = $GLOBALS['connexion']->prepare($sql);
@@ -1191,52 +1191,8 @@ function formatNumeroRecu($numero) {
     return $format;
 }
 
-// ================= UPLOAD LOGO =================
-function uploadLogo($fichier) {
-    $dossier = __DIR__ . '/../public/uploads/logo/';
-    
-    if (!file_exists($dossier)) {
-        mkdir($dossier, 0777, true);
-    }
-    
-    if (!is_writable($dossier)) {
-        error_log(" Dossier non accessible en écriture : " . $dossier);
-        return ['success' => false, 'message' => ' Erreur serveur : dossier non accessible'];
-    }
-    
-    $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    $extension = strtolower(pathinfo($fichier['name'], PATHINFO_EXTENSION));
-    
-    if (!in_array($extension, $extensions)) {
-        return ['success' => false, 'message' => ' Format non autorisé (jpg, png, gif, webp)'];
-    }
-    
-    if ($fichier['size'] > 2 * 1024 * 1024) {
-        return ['success' => false, 'message' => ' Logo trop grand (max 2 Mo)'];
-    }
-    
-    $nom_fichier = 'logo_' . date('Ymd_His') . '.' . $extension;
-    $chemin_complet = $dossier . $nom_fichier;
-    
-    if (move_uploaded_file($fichier['tmp_name'], $chemin_complet)) {
-        setConfig('entreprise_logo', 'uploads/logo/' . $nom_fichier);
-        
-        $ancien_logo = getConfig('entreprise_logo');
-        if ($ancien_logo && $ancien_logo != 'logo-removebg-preview.png') {
-            $ancien_chemin = __DIR__ . '/../public/' . $ancien_logo;
-            if (file_exists($ancien_chemin)) {
-                unlink($ancien_chemin);
-            }
-        }
-        
-        return ['success' => true, 'message' => ' Logo uploadé avec succès'];
-    } else {
-        $erreur = $_FILES['logo']['error'] ?? 'Erreur inconnue';
-        error_log(" Erreur upload : " . $erreur);
-        return ['success' => false, 'message' => ' Erreur lors du déplacement du fichier'];
-    }
-}
-// ========== DONNÉES POUR GRAPHIQUES ==========
+
+//  DONNÉES POUR GRAPHIQUES 
 
 /**
  * Ventes des 7 derniers jours
@@ -1361,5 +1317,93 @@ function filtrerVentes($filtres) {
     $req = $connexion->prepare($sql);
     $req->execute($params);
     return $req->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// RÉCUPÉRATION MOT DE PASSE
+
+
+function genererCodeRecuperation() {
+    return str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+}
+
+
+
+
+function envoyerEmailRecuperation($email, $code) {
+    //  Mode DEBUG : on retourne le code pour l'afficher
+    error_log(" Code de récupération pour $email : $code");
+    return $code;
+}
+
+
+function demanderCodeRecuperation($email) {
+    global $connexion;
+    
+    if (!emailExiste($email)) {
+        return ['success' => false, 'message' => 'Aucun compte trouvé avec cet email'];
+    }
+    
+    // Générer code à 6 chiffres
+    $code = genererCodeRecuperation();
+    $expire = date('Y-m-d H:i:s', strtotime('+15 minutes'));
+    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    
+    // Invalider les anciens codes
+    $sql = "UPDATE password_reset SET utilise = 1 WHERE email = ? AND utilise = 0";
+    $req = $connexion->prepare($sql);
+    $req->execute([$email]);
+    
+    // Enregistrer le nouveau code
+    $sql = "INSERT INTO password_reset (email, code, expire, ip_address) VALUES (?, ?, ?, ?)";
+    $req = $connexion->prepare($sql);
+    $req->execute([$email, $code, $expire, $ip]);
+    
+    // Envoyer l'email (mode DEBUG)
+    $code_envoye = envoyerEmailRecuperation($email, $code);
+    
+    return [
+        'success' => true,
+        'message' => ' Code envoyé sur votre adresse email',
+        'code_debug' => $code // Pour affichage temporaire
+    ];
+}
+
+
+function verifierCodeRecuperation($email, $code) {
+    global $connexion;
+    
+    $sql = "SELECT * FROM password_reset 
+            WHERE email = ? 
+            AND code = ? 
+            AND utilise = 0 
+            AND expire > NOW() 
+            ORDER BY date_demande DESC 
+            LIMIT 1";
+    
+    $req = $connexion->prepare($sql);
+    $req->execute([$email, $code]);
+    $reset = $req->fetch(PDO::FETCH_ASSOC);
+    
+    if ($reset) {
+        // Marquer le code comme utilisé
+        $sql = "UPDATE password_reset SET utilise = 1 WHERE id = ?";
+        $req = $connexion->prepare($sql);
+        $req->execute([$reset['id']]);
+        
+        return ['success' => true, 'message' => 'Code valide'];
+    }
+    
+    return ['success' => false, 'message' => ' Code invalide ou expiré'];
+}
+
+
+function reinitialiserMotDePasse($email, $nouveau_password) {
+    global $connexion;
+    
+    $password_hash = password_hash($nouveau_password, PASSWORD_DEFAULT);
+    
+    $sql = "UPDATE utilisateur SET password = ? WHERE email = ? AND statut = 'actif'";
+    $req = $connexion->prepare($sql);
+    return $req->execute([$password_hash, $email]);
 }
 ?>
