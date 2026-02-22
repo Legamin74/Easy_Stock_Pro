@@ -18,7 +18,6 @@ $all_articles = getAllArticle();
 ?>
 
 <style>
-/* ================= STYLE DIRECT DASHBOARD ================= */
 
 /* Reset des marges et padding */
 * {
