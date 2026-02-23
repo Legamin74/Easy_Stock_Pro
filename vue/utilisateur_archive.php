@@ -7,9 +7,7 @@ $utilisateurs = getUtilisateursArchive();
 ?>
 
 <div class="home-content">
-    <!-- ======================================== -->
-    <!--         EN-TÊTE AVEC ONGLETS              -->
-    <!-- ======================================== -->
+  
     <div class="page-header">
         <h2><i class="bx bx-archive"></i> Gestion des utilisateurs</h2>
         <div class="header-tabs">
@@ -18,9 +16,7 @@ $utilisateurs = getUtilisateursArchive();
         </div>
     </div>
 
-    <!-- ======================================== -->
-    <!--         MESSAGES DE CONFIRMATION         -->
-    <!-- ======================================== -->
+    
     <?php if (isset($_SESSION['message'])): ?>
         <div class="alert-message <?= $_SESSION['message']['type'] ?>">
             <i class="bx <?= $_SESSION['message']['type'] == 'success' ? 'bx-check-circle' : 'bx-error-circle' ?>"></i>
@@ -29,9 +25,7 @@ $utilisateurs = getUtilisateursArchive();
         <?php unset($_SESSION['message']); ?>
     <?php endif; ?>
 
-    <!-- ======================================== -->
-    <!--      SECTION LISTE DES UTILISATEURS      -->
-    <!-- ======================================== -->
+   
     <div class="list-section">
         <h3 class="list-title">
             <i class="bx bx-archive"></i>

@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../public/css/style.css">
     <style>
         body {
-           /* background: linear-gradient(135deg, rgb(1, 62, 1) 0%, rgb(6, 88, 6) 100%);*/
+           background: linear-gradient(135deg, rgb(1, 62, 1) 0%, rgb(6, 88, 6) 100%);
             height: 100vh;
             display: flex;
             align-items: center;

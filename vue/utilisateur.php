@@ -12,11 +12,15 @@ $utilisateurs = getUtilisateursActifs();
    
     <div class="page-header">
         <h2> Gestion des utilisateur</h2>
+         <a href="ajouter_utilisateur.php" class="btn-add">
+            <i class="bx bx-plus"></i> Nouvelle commande
+        </a>
         <div class="header-tabs">
             <a href="utilisateur.php" class="tab-link active"> Actifs</a>
             <a href="utilisateur_archive.php" class="tab-link"> Archives</a>
         </div>
     </div>
+    
 
     <?php if (!empty($_SESSION['message'])): ?>
         <div class="alert <?= $_SESSION['message']['type'] ?>">
