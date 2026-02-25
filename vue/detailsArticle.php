@@ -35,7 +35,7 @@ if (!$article) {
                 <li class="list-group-item"><strong>Quantité :</strong> <?= htmlspecialchars($article['quantite']) ?></li>
                 <li class="list-group-item"><strong>Prix unitaire :</strong> <?= htmlspecialchars($article['prix_unitaire']) ?></li>
                 <li class="list-group-item"><strong>Date d'enregistrement :</strong> <?= htmlspecialchars($article['date_fabrication']) ?></li>
-                <li class="list-group-item"><strong>Date d'expiration :</strong> <?= htmlspecialchars($article['date_expiration']) ?></li>
+                <li class="list-group-item"><strong>Date d'expiration :</strong> <?= htmlspecialchars($article[''] ?? '') ?></li>
             </ul>
             <a href="article.php" class="btn btn-secondary">Retour</a>
         </div>

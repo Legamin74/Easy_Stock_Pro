@@ -14,15 +14,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($_POST['date_expiration'])) {
         $date_expiration = $_POST['date_expiration'];
     }
+     $image = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+        $extensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $extension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+        
+        if (in_array($extension, $extensions)) {
+            if ($_FILES['image']['size'] <= 2 * 1024 * 1024) { // 2 Mo max
+                $nom_fichier = 'article_' . date('Ymd_His') . '.' . $extension;
+                $chemin_destination = __DIR__ . '/../public/uploads/articles/' . $nom_fichier;
+                
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $chemin_destination)) {
+                    $image = 'uploads/articles/' . $nom_fichier;
+                }
+            }
+        }
+    }
+ 
 
     // Requête SQL
-    $sql = "INSERT INTO article (nom_article, id_categorie, quantite, prix_unitaire, seuil_alerte, date_expiration) 
-            VALUES (?, ?, ?, ?, ?, ?)";
+   $sql = "INSERT INTO article (nom_article, id_categorie, quantite, prix_unitaire, seuil_alerte, date_expiration, image) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
     
     $req = $connexion->prepare($sql);
     
     if ($req) {
-        $result = $req->execute([$nom, $id_categorie, $quantite, $prix, $seuil, $date_expiration]);
+        $result = $req->execute([$nom, $id_categorie, $quantite, $prix, $seuil, $date_expiration,$image]);
 
         if ($result) {
             $_SESSION['message'] = [
@@ -35,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'type' => 'danger'
             ];
         }
+
     } else {
         $_SESSION['message'] = [
             'text' => ' Erreur de préparation de la requête',

@@ -356,6 +356,68 @@ $ventes_aujourdhui = getVentesDuJour();
     padding: 15px 12px;
 }
 
+/* Style Select2 */
+.select2-container--default .select2-selection--single {
+    height: 48px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    background: white;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 28px;
+    color: #1a2b3c;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 46px;
+    right: 10px;
+}
+
+/* Couleur de survol des options (vert comme bouton Ajouter) */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #0b5e2e !important;
+    color: white !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] img {
+    border: 1px solid white;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+    background-color: #e8f5e9;
+    color: #0b5e2e;
+}
+
+.select2-dropdown {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.select2-results__option {
+    padding: 8px 12px;
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+}
+
+.select2-results__option span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.select2-results__option img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
 .btn-remove {
     color: #b3261e;
     text-decoration: none;
@@ -502,7 +564,6 @@ $ventes_aujourdhui = getVentesDuJour();
 <div class="home-content">
     <div class="vente-container">
         
-        <!-- Messages -->
         <?php if (isset($_SESSION['message'])): ?>
             <div class="alert <?= $_SESSION['message']['type'] ?>">
                 <?= $_SESSION['message']['text'] ?>
@@ -510,7 +571,6 @@ $ventes_aujourdhui = getVentesDuJour();
             <?php unset($_SESSION['message']); ?>
         <?php endif; ?>
 
-        <!-- Layout 2 colonnes -->
         <div class="vente-row">
             <!-- Colonne gauche : Nouvelle vente -->
             <div class="vente-col">
@@ -520,7 +580,6 @@ $ventes_aujourdhui = getVentesDuJour();
                     </div>
                     
                     <form method="POST">
-                        <!-- Client -->
                         <div class="client-row">
                             <select name="id_client" id="id_client" class="client-select" required>
                                 <option value="">-- Choisir un client --</option>
@@ -540,11 +599,10 @@ $ventes_aujourdhui = getVentesDuJour();
                             </a>
                         </div>
 
-                        <!-- Article -->
                         <div class="article-row">
                             <div class="form-group">
                                 <label>ARTICLE</label>
-                                <select name="id_article" id="id_article" required>
+                                <select name="id_article" id="id_article" class="article-select" required>
                                     <option value="">-- Choisir --</option>
                                     <?php
                                     $articles = getArticleActif();
@@ -554,9 +612,9 @@ $ventes_aujourdhui = getVentesDuJour();
                                     <option value="<?= $article['id'] ?>" 
                                             data-prix="<?= $article['prix_unitaire'] ?>"
                                             data-stock="<?= $stock ?>"
+                                            data-image="<?= $article['image'] ?? '' ?>"
                                             <?= $stock <= 0 ? 'disabled' : '' ?>>
-                                        <?= htmlspecialchars($article['nom_article']) ?> 
-                                        (<?= $stock ?> dispo)
+                                        <?= htmlspecialchars($article['nom_article']) ?> (<?= $stock ?> dispo)
                                     </option>
                                     <?php endforeach; ?>
                                 </select>
@@ -618,7 +676,20 @@ $ventes_aujourdhui = getVentesDuJour();
                                 <tbody>
                                     <?php foreach ($panier as $index => $item): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($item['nom_article']) ?></td>
+                                        <td style="display: flex; align-items: center; gap: 10px;">
+                                            <?php 
+                                            $sql_img = "SELECT image FROM article WHERE id = ?";
+                                            $req_img = $connexion->prepare($sql_img);
+                                            $req_img->execute([$item['id_article']]);
+                                            $img = $req_img->fetchColumn();
+                                            ?>
+                                            <?php if (!empty($img)): ?>
+                                                <img src="../public/<?= $img ?>" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;">
+                                            <?php else: ?>
+                                                <span style="font-size: 24px;">📷</span>
+                                            <?php endif; ?>
+                                            <?= htmlspecialchars($item['nom_article']) ?>
+                                        </td>
                                         <td class="text-right"><?= number_format($item['prix'], 0, ',', ' ') ?> F</td>
                                         <td class="text-center"><?= $item['quantite'] ?></td>
                                         <td class="text-right"><?= number_format($item['prix'] * $item['quantite'], 0, ',', ' ') ?> F</td>
@@ -651,7 +722,7 @@ $ventes_aujourdhui = getVentesDuJour();
             </div>
         </div>
 
-        <!-- Section Ventes du jour (en bas) -->
+        <!-- Ventes du jour -->
         <div class="ventes-jour-section">
             <h2 class="section-title">Ventes du jour</h2>
             
@@ -710,31 +781,68 @@ $ventes_aujourdhui = getVentesDuJour();
     </div>
 </div>
 
-<script>
-// Mise a jour des prix
-document.getElementById('id_article').addEventListener('change', updatePrix);
-document.getElementById('quantite').addEventListener('input', updatePrix);
+<!-- jQuery et Select2 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script>
+$(document).ready(function() {
+    // Initialiser Select2
+    if ($('#id_article').length > 0) {
+        $('#id_article').select2({
+            templateResult: formatOption,
+            templateSelection: formatOption,
+            escapeMarkup: function(m) { return m; },
+            width: '100%',
+            minimumResultsForSearch: -1
+        });
+
+        // Écouter le changement de Select2
+        $('#id_article').on('change', function() {
+            updatePrix();
+        });
+    }
+
+    function formatOption(option) {
+        if (!option.id) return option.text;
+        
+        var image = $(option.element).data('image');
+        var text = option.text;
+        
+        if (image) {
+            return $('<span><img src="../public/' + image + '" style="width:30px; height:30px; object-fit:cover; margin-right:10px; border-radius:4px;" /> ' + text + '</span>');
+        } else {
+            return $('<span><span style="display:inline-block; width:30px; height:30px; margin-right:10px; background:#f0f0f0; border-radius:4px; text-align:center; line-height:30px;">📷</span> ' + text + '</span>');
+        }
+    }
+
+    // Gestion du client en AJAX
+    $('#id_client').on('change', function() {
+        const formData = new FormData();
+        formData.append('set_client', this.value);
+        
+        fetch('vente.php', {
+            method: 'POST',
+            body: formData
+        });
+    });
+});
+
+// Fonction de mise à jour des prix
 function updatePrix() {
-    const select = document.getElementById('id_article');
-    const option = select.options[select.selectedIndex];
-    const prix = option.dataset.prix || 0;
-    const quantite = document.getElementById('quantite').value || 0;
+    var select = document.getElementById('id_article');
+    if (!select) return;
+    
+    var option = select.options[select.selectedIndex];
+    var prix = option ? (option.dataset.prix || 0) : 0;
+    var quantite = document.getElementById('quantite').value || 0;
     
     document.getElementById('prix_unitaire').value = parseInt(prix).toLocaleString() + ' F';
     document.getElementById('total_ligne').value = (prix * quantite).toLocaleString() + ' F';
 }
 
-// Selection client en AJAX
-document.getElementById('id_client').addEventListener('change', function() {
-    const formData = new FormData();
-    formData.append('set_client', this.value);
-    
-    fetch('vente.php', {
-        method: 'POST',
-        body: formData
-    });
-});
+// Écouter la quantité
+document.getElementById('quantite')?.addEventListener('input', updatePrix);
 </script>
 
 <?php include 'pied.php'; ?>

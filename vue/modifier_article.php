@@ -33,6 +33,21 @@ $categories = getCategorie();
                 <input type="hidden" name="id" value="<?= $article['id'] ?>">
 
                 <div class="form-row">
+                <?php if (!empty($article['image'])): ?>
+                    <div class="form-group">
+                        <label>Image actuelle</label>
+                        <div>
+                            <img src="../public/<?= $article['image'] ?>" alt="Image" style="width: 100px; height: 100px; object-fit: cover; border-radius: 5px;">
+                        </div>
+                    </div>
+                 <?php endif; ?>
+
+                    <!-- Upload nouvelle image -->
+                    <div class="form-group">
+                        <label> Changer l'image (optionnel)</label>
+                        <input type="file" name="image" accept="image/*" class="form-control">
+                        <input type="hidden" name="image_actuelle" value="<?= $article['image'] ?? '' ?>">
+                    </div>
                     <div class="form-group">
                         <label>Nom de l'article</label>
                         <input type="text" name="nom_article" value="<?= htmlspecialchars($article['nom_article']) ?>" required>

@@ -33,7 +33,7 @@ $categories = getCategorie();
                 Ajouter un nouvel article
             </h3>
 
-            <form action="../model/ajoutArticle.php" method="POST" class="article-form">
+            <form action="../model/ajoutArticle.php" method="POST" class="article-form" enctype="multipart/form-data">
                 <div class="form-row">
                     <div class="form-group">
                         <label>Nom de l'article</label>
@@ -81,6 +81,11 @@ $categories = getCategorie();
                         <small>Stock minimum avant alerte</small>
                     </div>
                 </div>
+                 <div class="form-group">
+                    <label> Image de l'article (optionnelle)</label>
+                    <input type="file" name="image" accept="image/*" class="form-control">
+                    <small>Formats : JPG, PNG, GIF (Max 2 Mo)</small>
+                </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
@@ -102,6 +107,7 @@ $categories = getCategorie();
             <table class="article-table">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Article</th>
                         <th>Catégorie</th>
                         <th>Quantité</th>
@@ -120,9 +126,20 @@ $categories = getCategorie();
                             </td>
                         </tr>
                     <?php else: ?>
+                        
                         <?php foreach ($articles as $a): ?>
+                            
                         <tr>
-                            <td class="article-name">
+                            <td>
+                                 <?php if (!empty($a['image'])): ?>
+                                    <a href="../public/<?= $a['image'] ?>" data-lightbox="article-<?= $a['id'] ?>" data-title="<?= htmlspecialchars($a['nom_article']) ?>">
+                                         <img src="../public/<?= $a['image'] ?>" alt="Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; cursor: pointer;">
+                                     </a>
+                                    <?php else: ?>
+                                        <span style="color: #ccc;">Aucun image</span>
+                                     <?php endif; ?>
+                             </td>
+                                    <td class="article-name">
                                 <span class="product-icon"></span>
                                 <?= htmlspecialchars($a['nom_article']) ?>
                             </td>
@@ -136,7 +153,7 @@ $categories = getCategorie();
                                     : '—' ?>
                             </td>
                             <td class="actions">
-                                <a href="details_article.php?id=<?= $a['id'] ?>" 
+                                <a href="detailsArticle.php?id=<?= $a['id'] ?>" 
                                    class="btn-icon details" 
                                    title="Détails">
                                     <i class="bx bx-show"></i>
