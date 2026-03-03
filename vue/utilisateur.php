@@ -12,8 +12,8 @@ $utilisateurs = getUtilisateursActifs();
    
     <div class="page-header">
         <h2> Gestion des utilisateur</h2>
-         <a href="ajouter_utilisateur.php" class="btn-add">
-            <i class="bx bx-plus"></i> Nouvelle commande
+         <a href="ajouter_utilisateur.php" class="btn-add-user">
+            <i class="bx bx-plus"></i> Nouvel Utilisateur
         </a>
         <div class="header-tabs">
             <a href="utilisateur.php" class="tab-link active"> Actifs</a>
@@ -92,5 +92,44 @@ $utilisateurs = getUtilisateursActifs();
         </table>
     </div>
 </div>
+<style>
+    /* ========== BOUTON NOUVEL UTILISATEUR ========== */
+.btn-add-user {
+    background: #0b5e2e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.btn-add-user:hover {
+    background: #0a4f26;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(11, 94, 46, 0.3);
+}
+
+.btn-add-user i {
+    font-size: 18px;
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+    .btn-add-user {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+    }
+}
+</style>
 
 <?php include 'pied.php'; ?>

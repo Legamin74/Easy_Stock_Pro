@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 23 fév. 2026 à 15:14
+-- Généré le : mar. 03 mars 2026 à 14:00
 -- Version du serveur : 9.1.0
 -- Version de PHP : 8.3.14
 
@@ -34,11 +34,14 @@ CREATE TABLE IF NOT EXISTS `article` (
   `id_categorie` int NOT NULL,
   `quantite` int NOT NULL,
   `prix_unitaire` int NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `code_barre` varchar(20) DEFAULT NULL,
   `date_fabrication` datetime NOT NULL,
   `date_expiration` date DEFAULT NULL,
   `seuil_alerte` int DEFAULT '5',
   `statut` enum('actif','archive') NOT NULL DEFAULT 'actif',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `code_barre` (`code_barre`),
   KEY `id_categorie` (`id_categorie`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
@@ -131,19 +134,7 @@ CREATE TABLE IF NOT EXISTS `configuration` (
   `date_modif` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cle` (`cle`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
-
---
--- Déchargement des données de la table `configuration`
---
-
-INSERT INTO `configuration` (`id`, `cle`, `valeur`, `type`, `date_modif`) VALUES
-(9, 'entreprise_nom', 'EasyStock', 'text', '2026-02-14 10:56:56'),
-(10, 'entreprise_email', 'contact@easystock.com', 'email', '2026-02-14 10:56:56'),
-(11, 'entreprise_telephone', '54846780', 'text', '2026-02-13 13:27:25'),
-(12, 'entreprise_adresse', 'Bobo, Burkina Fasso', 'textarea', '2026-02-13 13:22:04'),
-(13, 'devise', 'FCFA', 'text', '2026-02-14 12:26:13'),
-(14, 'format_recu', 'ESP-{annee}-{numero}', 'text', '2026-02-13 13:22:04');
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
