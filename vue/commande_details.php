@@ -578,7 +578,7 @@ $devise = getConfig('devise', 'FCFA');
     </div>
 </div>
 
-<!-- Contenu de la facture (cache a l'ecran mais utilise pour l'impression) -->
+
 <div id="facture-content" style="display: none;">
     <div class="entete">
         <h1><?= htmlspecialchars(getConfig('entreprise_nom', 'EasyStock_Pro')) ?></h1>

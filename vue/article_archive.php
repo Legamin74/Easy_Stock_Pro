@@ -8,9 +8,7 @@ $articles = getArticleArchive();
 ?>
 
 <div class="home-content">
-    <!-- ======================================== -->
-    <!--         EN-TÊTE AVEC ONGLETS              -->
-    <!-- ======================================== -->
+   
     <div class="page-header">
         <h2><i class="bx bx-archive"></i> Gestion des articles</h2>
         <div class="header-tabs">
@@ -19,9 +17,7 @@ $articles = getArticleArchive();
         </div>
     </div>
 
-    <!-- ======================================== -->
-    <!--      SECTION LISTE DES ARTICLES          -->
-    <!-- ======================================== -->
+ 
     <div class="list-section">
         <h3 class="list-title">
             <i class="bx bx-archive"></i>

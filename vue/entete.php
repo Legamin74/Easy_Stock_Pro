@@ -12,12 +12,47 @@ include_once '../model/fonction.php';
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+  <!--  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body>
+
+  <style>
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        width: 80%;
+        max-width: 300px;
+        transition: left 0.3s ease;
+        z-index: 9999;
+        background: rgb(1, 62, 1);
+    }
+    .sidebar.active {
+        left: 0;
+    }
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 9998;
+    }
+    .sidebar-overlay.active {
+        display: block;
+    }
+    .home-section {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+}
+</style>
     <div class="sidebar">
         <div class="sidebar-logo">
          <img src="../public/img/logo-removebg-preview.png" alt="EasyStock_Pro">
@@ -170,7 +205,7 @@ include_once '../model/fonction.php';
     }
 })();
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>-->
 
 </body>
 </html>

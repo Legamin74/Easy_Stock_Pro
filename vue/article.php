@@ -41,7 +41,7 @@ $categories = getCategorie();
                     </div>
 
                     <div class="form-group">
-                        <label> Catégorie</label>
+                        <label>Catégorie</label>
                         <select name="id_categorie" required>
                             <option value="">-- Choisir une catégorie --</option>
                             <?php foreach ($categories as $cat): ?>
@@ -55,41 +55,50 @@ $categories = getCategorie();
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label> Quantité</label>
+                        <label>Quantité</label>
                         <input type="number" name="quantite" placeholder="Ex: 50" min="0" required>
                     </div>
 
                     <div class="form-group">
-                        <label> Prix unitaire (FCFA)</label>
+                        <label>Prix unitaire (FCFA)</label>
                         <input type="number" name="prix_unitaire" placeholder="Ex: 15000" min="0" required>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label> Date d'enregistrement</label>
+                        <label>Date d'enregistrement</label>
                         <input type="datetime-local" name="date_creation" value="<?= date('Y-m-d\TH:i') ?>">
                     </div>
 
                     <div class="form-group">
-                        <label> Date d'expiration (optionnelle)</label>
+                        <label>Date d'expiration (optionnelle)</label>
                         <input type="date" name="date_expiration">
                     </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label>Seuil d'alerte</label>
                         <input type="number" name="seuil_alerte" value="5" min="1" class="form-control">
                         <small>Stock minimum avant alerte</small>
                     </div>
+
+                    <div class="form-group">
+                        <label>Code-barres (optionnel)</label>
+                        <input type="text" name="code_barre" placeholder="Ex: 1234567890123">
+                    </div>
                 </div>
-                 <div class="form-group">
-                    <label> Image de l'article (optionnelle)</label>
+
+                <div class="form-group full-width">
+                    <label>Image de l'article (optionnelle)</label>
                     <input type="file" name="image" accept="image/*" class="form-control">
                     <small>Formats : JPG, PNG, GIF (Max 2 Mo)</small>
                 </div>
 
                 <div class="form-actions">
                     <button type="submit" class="btn-submit">
-                        </i> Enregistrer l'article
+                        <i class="bx bx-save"></i> Enregistrer l'article
                     </button>
                 </div>
             </form>

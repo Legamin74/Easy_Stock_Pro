@@ -376,7 +376,7 @@ $ventes_aujourdhui = getVentesDuJour();
     right: 10px;
 }
 
-/* Couleur de survol des options (vert comme bouton Ajouter) */
+
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
     background-color: #0b5e2e !important;
     color: white !important;
@@ -528,9 +528,41 @@ $ventes_aujourdhui = getVentesDuJour();
 .text-center {
     text-align: center;
 }
+.client-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
 
+.client-select {
+    flex: 2;
+    min-width: 200px;
+}
 
+.btn-add-client {
+    flex: 1;
+    min-width: 140px;
+    background: #0b5e2e;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.3s;
+    white-space: nowrap;
+    border: none;
+}
 
+.btn-add-client:hover {
+    background: #0a4f26;
+    transform: translateY(-2px);
+}
 /* Responsive */
 @media (max-width: 992px) {
     .vente-row {
@@ -559,6 +591,51 @@ $ventes_aujourdhui = getVentesDuJour();
     
     .table-responsive {
         overflow-x: auto;
+    }
+
+}
+/* Améliorations spécifiques à la vente pour mobile */
+@media (max-width: 768px) {
+    .vente-card {
+        margin-bottom: 15px;
+    }
+    
+    .article-row .form-group {
+        margin-bottom: 10px;
+    }
+    
+    .btn-add {
+        margin-top: 5px;
+    }
+    
+    .panier-table th {
+        font-size: 11px !important;
+        padding: 8px 5px !important;
+    }
+    
+    .panier-table td {
+        padding: 8px 5px !important;
+        font-size: 12px !important;
+    }
+    
+    .panier-table td:first-child {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .panier-table td:first-child img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+    
+    .btn-remove {
+        font-size: 16px !important;
+    }
+    
+    .total-panier {
+        font-size: 16px !important;
     }
 }
 </style>
@@ -597,7 +674,7 @@ $ventes_aujourdhui = getVentesDuJour();
                             </select>
                             
                             <a href="client.php" class="btn-add-client" target="_blank">
-                                + Nouveau
+                                <i class="bx bx-plus"></i> Nouveau client
                             </a>
                         </div>
 
@@ -623,6 +700,18 @@ $ventes_aujourdhui = getVentesDuJour();
                             </div>
                             
                             <div class="form-group">
+                                <label> SCAN CODE-BARRES</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" id="scan_code" class="form-control" 
+                                           placeholder="Scannez le code..." autofocus>
+                                    <button type="button" id="btn_scan" class="btn-add" style="width: auto; padding: 12px 20px;">
+                                        <i class="bx bx-search"></i>
+                                    </button>
+                                </div>
+                                <small>Scannez ou saisissez le code-barres</small>
+                            </div>
+                            
+                            <div class="form-group">
                                 <label>QUANTITE</label>
                                 <input type="number" name="quantite" id="quantite" min="1" value="1" required>
                             </div>
@@ -640,20 +729,20 @@ $ventes_aujourdhui = getVentesDuJour();
                             </div>
                             
                             <button type="submit" name="ajouter_panier" class="btn-add">
-                                + Ajouter au panier
+                                 Ajouter au panier
                             </button>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Colonne droite : Panier -->
+           
             <div class="vente-col">
                 <div class="vente-card">
                     <div class="card-header">
                         <h3>Panier</h3>
                         <?php if (!empty($panier)): ?>
-                        <a href="vente.php?vider=1" class="btn-clear" onclick="return confirm('Vider le panier ?')">
+                        <a href="vente.php?vider=1" class="btn-clear" data-confirm="Vider le panier ?">
                             Vider
                         </a>
                         <?php endif; ?>
@@ -688,7 +777,7 @@ $ventes_aujourdhui = getVentesDuJour();
                                             <?php if (!empty($img)): ?>
                                                 <img src="../public/<?= $img ?>" style="width: 40px; height: 40px; object-fit: cover; border-radius: 5px;">
                                             <?php else: ?>
-                                                <span style="font-size: 24px;">📷</span>
+                                                <span style="font-size: 24px;"></span>
                                             <?php endif; ?>
                                             <?= htmlspecialchars($item['nom_article']) ?>
                                         </td>
@@ -783,68 +872,150 @@ $ventes_aujourdhui = getVentesDuJour();
     </div>
 </div>
 
-<!-- jQuery et Select2 -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 <script>
-$(document).ready(function() {
-    // Initialiser Select2
-    if ($('#id_article').length > 0) {
-        $('#id_article').select2({
-            templateResult: formatOption,
-            templateSelection: formatOption,
-            escapeMarkup: function(m) { return m; },
-            width: '100%',
-            minimumResultsForSearch: 0
-        });
+(function() {
+    // Attendre que le DOM soit complètement chargé
+    function init() {
+        // Initialiser Select2
+        if ($('#id_article').length > 0) {
+            $('#id_article').select2({
+                templateResult: formatOption,
+                templateSelection: formatOption,
+                escapeMarkup: function(m) { return m; },
+                width: '100%',
+                minimumResultsForSearch: 0
+            });
 
-        // Écouter le changement de Select2
-        $('#id_article').on('change', function() {
-            updatePrix();
-        });
-    }
+            $('#id_article').on('change', function() {
+                updatePrix();
+            });
+        }
 
-    function formatOption(option) {
-        if (!option.id) return option.text;
+        function formatOption(option) {
+            if (!option.id) return option.text;
+            
+            var image = $(option.element).data('image');
+            var text = option.text;
+            
+            if (image) {
+                return $('<span><img src="../public/' + image + '" style="width:30px; height:30px; object-fit:cover; margin-right:10px; border-radius:4px;" /> ' + text + '</span>');
+            } else {
+                return $('<span><span style="display:inline-block; width:30px; height:30px; margin-right:10px; background:#f0f0f0; border-radius:4px; text-align:center; line-height:30px;">📷</span> ' + text + '</span>');
+            }
+        }
+
+        // Gestion du client en AJAX
+        $('#id_client').on('change', function() {
+            const formData = new FormData();
+            formData.append('set_client', this.value);
+            
+            fetch('vente.php', {
+                method: 'POST',
+                body: formData
+            });
+        });
         
-        var image = $(option.element).data('image');
-        var text = option.text;
+        // Fonction de recherche par code-barres
+        function rechercherArticle() {
+            var code = $('#scan_code').val().trim();
+            if (code === '') {
+                alert('Veuillez scanner ou saisir un code');
+                return;
+            }
+            
+            $.ajax({
+                url: '../model/rechercher_article_par_code.php',
+                method: 'POST',
+                data: { code: code },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        var formData = new FormData();
+                        formData.append('id_article', response.article.id);
+                        formData.append('quantite', 1);
+                        formData.append('ajouter_panier', true);
+                        
+                        fetch('vente.php', {
+                            method: 'POST',
+                            body: formData
+                        }).then(function() {
+                            window.location.reload();
+                        });
+                    } else {
+                        alert('Article non trouvé');
+                        $('#scan_code').val('').focus();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Erreur AJAX: ' + error);
+                    console.log('Statut:', status);
+                    console.log('Réponse:', xhr.responseText);
+                }
+            });
+        }
         
-        if (image) {
-            return $('<span><img src="../public/' + image + '" style="width:30px; height:30px; object-fit:cover; margin-right:10px; border-radius:4px;" /> ' + text + '</span>');
+        // ✅ GESTION DU BOUTON VIDER (correction de l'erreur)
+        $('.btn-clear').on('click', function(e) {
+            e.preventDefault();
+            if (confirm($(this).data('confirm'))) {
+                window.location.href = $(this).attr('href');
+            }
+        });
+        
+        // Écouter la touche Entrée
+        var scanCode = $('#scan_code');
+        if (scanCode.length > 0) {
+            scanCode.on('keypress', function(e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    rechercherArticle();
+                }
+            });
+            
+            // Focus sur le champ scan
+            scanCode.focus();
         } else {
-            return $('<span><span style="display:inline-block; width:30px; height:30px; margin-right:10px; background:#f0f0f0; border-radius:4px; text-align:center; line-height:30px;">📷</span> ' + text + '</span>');
+            console.log('Champ scan non trouvé');
+        }
+        
+        // Écouter le clic sur le bouton
+        var btnScan = $('#btn_scan');
+        if (btnScan.length > 0) {
+            btnScan.on('click', function() {
+                rechercherArticle();
+            });
+        } else {
+            console.log('Bouton scan non trouvé');
         }
     }
 
-    // Gestion du client en AJAX
-    $('#id_client').on('change', function() {
-        const formData = new FormData();
-        formData.append('set_client', this.value);
+    // Attendre que le DOM soit prêt
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Fonction de mise à jour des prix
+    window.updatePrix = function() {
+        var select = document.getElementById('id_article');
+        if (!select) return;
         
-        fetch('vente.php', {
-            method: 'POST',
-            body: formData
-        });
-    });
-});
+        var option = select.options[select.selectedIndex];
+        var prix = option ? (option.dataset.prix || 0) : 0;
+        var quantite = document.getElementById('quantite').value || 0;
+        
+        document.getElementById('prix_unitaire').value = parseInt(prix).toLocaleString() + ' F';
+        document.getElementById('total_ligne').value = (prix * quantite).toLocaleString() + ' F';
+    };
 
-// Fonction de mise à jour des prix
-function updatePrix() {
-    var select = document.getElementById('id_article');
-    if (!select) return;
-    
-    var option = select.options[select.selectedIndex];
-    var prix = option ? (option.dataset.prix || 0) : 0;
-    var quantite = document.getElementById('quantite').value || 0;
-    
-    document.getElementById('prix_unitaire').value = parseInt(prix).toLocaleString() + ' F';
-    document.getElementById('total_ligne').value = (prix * quantite).toLocaleString() + ' F';
-}
-
-// Écouter la quantité
-document.getElementById('quantite')?.addEventListener('input', updatePrix);
+    // Écouter la quantité
+    var quantite = document.getElementById('quantite');
+    if (quantite) {
+        quantite.addEventListener('input', window.updatePrix);
+    }
+})();
 </script>
-
 <?php include 'pied.php'; ?>

@@ -84,7 +84,10 @@ $categories = getCategorie();
                         <label>Seuil d'alerte</label>
                         <input type="number" name="seuil_alerte" value="<?= $article['seuil_alerte'] ?? 5 ?>">
                     </div>
-
+                    <div class="form-group">
+                        <label> Code-barres</label>
+                        <input type="text" name="code_barre" value="<?= htmlspecialchars($article['code_barre'] ?? '') ?>" class="form-control">
+                    </div>
                     <div class="form-group">
                         <label>Date d'expiration</label>
                         <input type="date" name="date_expiration" 

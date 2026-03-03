@@ -86,7 +86,7 @@ if (isset($_POST['valider_commande'])) {
     } elseif (!$id_fournisseur) {
         $_SESSION['message'] = ['text' => 'Veuillez selectionner un fournisseur', 'type' => 'danger'];
     } else {
-        // Preparer les articles pour la fonction creerCommande
+        
         $articles_commande = [];
         foreach ($panier as $item) {
             $articles_commande[] = [
@@ -376,9 +376,9 @@ foreach ($panier as $item) {
             </h1>
         </div>
 
-        <!-- Layout 2 colonnes -->
+      
         <div class="ajout-row">
-            <!-- Colonne gauche : Informations commande -->
+            
             <div class="ajout-card">
                 <div class="card-header">
                     <h3>
@@ -418,7 +418,7 @@ foreach ($panier as $item) {
                 </form>
             </div>
 
-            <!-- Colonne droite : Ajout articles -->
+           
             <div class="ajout-card">
                 <div class="card-header">
                     <h3>

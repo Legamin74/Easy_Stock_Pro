@@ -470,9 +470,6 @@ function getAllCommandes() {
     return $req->fetchAll(PDO::FETCH_ASSOC);
 }
 
-/**
- * Recuperer une commande avec ses details
- */
 function getCommandeById($id) {
     global $connexion;
     

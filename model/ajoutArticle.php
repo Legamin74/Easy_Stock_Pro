@@ -8,6 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $quantite = (int)$_POST['quantite'];
     $prix = (int)$_POST['prix_unitaire'];
     $seuil = (int)($_POST['seuil_alerte'] ?? 5);
+    $code_barre = $_POST['code_barre'] ?? null;
     
     // Gestion de la date d'expiration
     $date_expiration = null;
@@ -33,13 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  
 
     // Requête SQL
-   $sql = "INSERT INTO article (nom_article, id_categorie, quantite, prix_unitaire, seuil_alerte, date_expiration, image) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)";
+   $sql = "INSERT INTO article (nom_article, id_categorie, quantite, prix_unitaire, seuil_alerte, date_expiration, image,code_barre) 
+        VALUES (?, ?, ?, ?, ?, ?, ?,?)";
     
     $req = $connexion->prepare($sql);
     
     if ($req) {
-        $result = $req->execute([$nom, $id_categorie, $quantite, $prix, $seuil, $date_expiration,$image]);
+        $result = $req->execute([$nom, $id_categorie, $quantite, $prix, $seuil, $date_expiration,$image,$code_barre]);
 
         if ($result) {
             $_SESSION['message'] = [

@@ -24,9 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
 ?>
 
 <div class="home-content">
-    <!-- ======================================== -->
-    <!-- EN-TÊTE PAGE CONFIGURATION              -->
-    <!-- ======================================== -->
+ 
     <div class="config-header">
         <div class="header-title">
             <i class="bx bx-cog"></i>
@@ -37,9 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
         </span>
     </div>
 
-    <!-- ======================================== -->
-    <!-- MESSAGES DE NOTIFICATION                -->
-    <!-- ======================================== -->
+   
     <?php if (isset($_SESSION['message'])): ?>
         <div class="alert <?= $_SESSION['message']['type'] ?>">
             <i class="bx bx-check-circle"></i>
@@ -47,9 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
         </div>
     <?php unset($_SESSION['message']); endif; ?>
 
-    <!-- ======================================== -->
-    <!-- FORMULAIRE CONFIGURATION                -->
-    <!-- ======================================== -->
+   
     <form method="POST" class="config-form">
         <input type="hidden" name="save_config" value="1">
 
@@ -117,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
             </div>
         </div>
 
-        <!--  SECTION VENTES -->
+    
         <div class="config-card">
             <div class="card-header">
                 <i class="bx bx-receipt"></i>
@@ -138,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
             </div>
         </div>
 
-        <!--  BOUTONS SAUVEGARDE -->
+    
         <div class="form-actions">
             <button type="submit" class="btn-submit">
                 <i class="bx bx-save"></i>
