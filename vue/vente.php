@@ -529,6 +529,8 @@ $ventes_aujourdhui = getVentesDuJour();
     text-align: center;
 }
 
+
+
 /* Responsive */
 @media (max-width: 992px) {
     .vente-row {
@@ -794,7 +796,7 @@ $(document).ready(function() {
             templateSelection: formatOption,
             escapeMarkup: function(m) { return m; },
             width: '100%',
-            minimumResultsForSearch: -1
+            minimumResultsForSearch: 0
         });
 
         // Écouter le changement de Select2

@@ -251,7 +251,7 @@ $all_articles = getAllArticle();
 </style>
 
 <div class="home-content">
-    <!-- ================= CARTES STATISTIQUES ================= -->
+   
     <div class="overview-boxes">
         <div class="box">
             <div class="right-side">
@@ -286,9 +286,7 @@ $all_articles = getAllArticle();
     </div>
 
    
-<!-- ======================================== -->
-<!--         SECTION GRAPHIQUES                -->
-<!-- ======================================== -->
+
 <div class="charts-row">
     <!-- Graphique 1 : Évolution des ventes -->
     <div class="chart-card">
