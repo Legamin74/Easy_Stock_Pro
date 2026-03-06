@@ -58,28 +58,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
                 <div class="form-group full-width">
                     <label>Nom de l'entreprise</label>
                     <input type="text" name="entreprise_nom" 
-                           value="<?= htmlspecialchars(getConfig('entreprise_nom', 'EasyStock_Pro')) ?>" 
+                           value="<?= htmlspecialchars(getConfig('entreprise_nom', '')) ?>" 
                            placeholder="EasyStock_Pro" required>
                 </div>
                 
                 <div class="form-group">
                     <label>Email de contact</label>
                     <input type="email" name="entreprise_email" 
-                           value="<?= htmlspecialchars(getConfig('entreprise_email', 'contact@easystock-pro.com')) ?>"
+                           value="<?= htmlspecialchars(getConfig('entreprise_email', '')) ?>"
                            placeholder="contact@easystock.com">
                 </div>
                 
                 <div class="form-group">
                     <label>Téléphone</label>
                     <input type="text" name="entreprise_telephone" 
-                           value="<?= htmlspecialchars(getConfig('entreprise_telephone', '77 123 45 67')) ?>"
-                           placeholder="77 123 45 67">
+                           value="<?= htmlspecialchars(getConfig('entreprise_telephone', '')) ?>"
+                           placeholder="54846780">
                 </div>
                 
                 <div class="form-group full-width">
                     <label>Adresse</label>
                     <textarea name="entreprise_adresse" rows="2" 
-                              placeholder="Dakar, Sénégal"><?= htmlspecialchars(getConfig('entreprise_adresse', 'Dakar, Sénégal')) ?></textarea>
+                              placeholder="Dakar, Sénégal"><?= htmlspecialchars(getConfig('entreprise_adresse', '')) ?></textarea>
                 </div>
             </div>
         </div>

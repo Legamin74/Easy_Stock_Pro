@@ -8,6 +8,7 @@ include_once '../model/fonction.php';
     <meta charset="UTF-8" />
     <title><?php echo ucfirst(str_replace(".php", "", basename($_SERVER['PHP_SELF']))); ?></title>
     <link rel="stylesheet" href="../public/css/style.css" />
+   
     <!-- Select2 CSS -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -55,7 +56,7 @@ include_once '../model/fonction.php';
 </style>
     <div class="sidebar">
         <div class="sidebar-logo">
-         <img src="../public/img/logo-removebg-preview.png" alt="EasyStock_Pro">
+        <img src="../public/img/logo-removebg-preview.png" alt="EasyStock_Pro">
         </div>
       <ul class="nav-links">
         <li>

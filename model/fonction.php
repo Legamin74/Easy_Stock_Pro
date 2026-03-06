@@ -1175,9 +1175,25 @@ function getConfig($cle, $default = '') {
 }
 
 function setConfig($cle, $valeur) {
-    $sql = "UPDATE configuration SET valeur = ? WHERE cle = ?";
-    $req = $GLOBALS['connexion']->prepare($sql);
-    return $req->execute([$valeur, $cle]);
+    global $connexion;
+    
+    // Vérifier si la clé existe déjà
+    $sql = "SELECT id FROM configuration WHERE cle = ?";
+    $req = $connexion->prepare($sql);
+    $req->execute([$cle]);
+    $existe = $req->fetch();
+    
+    if ($existe) {
+        // Mise à jour
+        $sql = "UPDATE configuration SET valeur = ? WHERE cle = ?";
+        $req = $connexion->prepare($sql);
+        return $req->execute([$valeur, $cle]);
+    } else {
+        // Insertion
+        $sql = "INSERT INTO configuration (cle, valeur, type) VALUES (?, ?, 'text')";
+        $req = $connexion->prepare($sql);
+        return $req->execute([$cle, $valeur]);
+    }
 }
 
 function formatNumeroRecu($numero) {

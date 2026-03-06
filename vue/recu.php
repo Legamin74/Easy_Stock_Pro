@@ -18,11 +18,11 @@ if (!$vente['imprime']) {
 }
 
 // Récupération configuration
-$nom_entreprise = getConfig('entreprise_nom', 'EasyStock_Pro');
-$adresse = getConfig('entreprise_adresse', 'Dakar, Sénégal');
-$telephone = getConfig('entreprise_telephone', '77 123 45 67');
-$email = getConfig('entreprise_email', 'contact@easystock-pro.com');
-$devise = getConfig('devise', 'FCFA');
+$nom_entreprise = getConfig('entreprise_nom', '');
+$adresse = getConfig('entreprise_adresse', ', ');
+$telephone = getConfig('entreprise_telephone', '');
+$email = getConfig('entreprise_email', '');
+$devise = getConfig('devise', '');
 $format_recu = getConfig('format_recu', 'ESP-{annee}-{numero}');
 $numero_recu = formatNumeroRecu($vente['id']);
 ?>
@@ -298,11 +298,11 @@ $numero_recu = formatNumeroRecu($vente['id']);
 <body>
     <div class="recu">
         <!-- Logo -->
-        <img src="../public/img/logo-removebg-preview.png" alt="<?= htmlspecialchars($nom_entreprise) ?>" class="logo">
+        <!--<img src="../public/img/logo-removebg-preview.png" alt="<?= htmlspecialchars($nom_entreprise) ?>" class="logo">-->
         
         <!-- Nom entreprise -->
         <h1><?= htmlspecialchars($nom_entreprise) ?></h1>
-        <div class="slogan">Votre partenaire stock</div>
+     <!--   <div class="slogan">Votre partenaire stock</div>-->
         
         <!-- Coordonnées -->
         <div class="entreprise-info">
